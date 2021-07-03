@@ -1,7 +1,7 @@
 package core
 
 import core.Monoid.{given_Monoid_Int, given_Monoid_String, given_Monoid_Boolean}
-import core.Monoid.Extensions.*
+import extension.ListExt.*
 
 final class MonoidSpec extends munit.FunSuite:
 
