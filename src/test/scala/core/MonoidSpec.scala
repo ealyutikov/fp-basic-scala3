@@ -1,33 +1,27 @@
 package core
 
-import core.Monoid.{given_Monoid_Int, given_Monoid_String, given_Monoid_Boolean}
-import extension.ListExt.*
+import core.Monoid.{given_Monoid_Boolean, given_Monoid_Int, given_Monoid_String}
+import extension.ListExt
 
-final class MonoidSpec extends munit.FunSuite:
-
-  private val intM = summon[Monoid[Int]]
-  private val strM = summon[Monoid[String]]
-  private val boolM = summon[Monoid[Boolean]]
+final class MonoidSpec extends munit.FunSuite with MonoidLaws:
 
   test("associative law") {
-    assert((("1" |+| "2") |+| "3") == ("1" |+| ("2" |+| "3")))
-    assert(((1 |+| 2) |+| 3) == (1 |+| (2 |+| 3)))
-    assert(((true |+| false) |+| true) == (true |+| (false |+| true)))
+    assert(associative(1, 2, 3))
+    assert(associative(true, true, false))
+    assert(associative("1", "2", "3"))
   }
 
   test("left identity law") {
-    assert((intM.empty |+| 55) == 55)
-    assert((strM.empty |+| "hello") == "hello")
-    assert((boolM.empty |+| true) == true)
+    assert(leftIdentity(55))
+    assert(leftIdentity("test"))
+    assert(leftIdentity(true))
+    assert(leftIdentity(false))
   }
 
   test("right identity law") {
-    assert((55 |+| intM.empty) == 55)
-    assert(("hello" |+| strM.empty) == "hello")
-    assert((false |+| boolM.empty) == false)
-  }
-
-  test("collect list with monoid") {
-    assert(List(1,2,3,4,5).collectM == 15)
+    assert(rightIdentity(55))
+    assert(rightIdentity("test"))
+    assert(rightIdentity(true))
+    assert(rightIdentity(false))
   }
 

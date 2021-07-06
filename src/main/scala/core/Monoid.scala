@@ -1,7 +1,6 @@
 package core
 
 trait Monoid[A] extends Semigroup[A]:
-  def combine(x: A, y: A): A
   def empty: A
   extension (x: A)
     infix def |+| (y: A): A = combine(x, y)
@@ -40,3 +39,13 @@ object Monoid:
   given [A]: Monoid[A => A] with
     def combine(f: A => A, g: A => A): A => A = f compose g
     def empty: A => A = a => a
+
+trait MonoidLaws:
+  def associative[A](a: A, b: A, c: A)(using M: Monoid[A]): Boolean =
+    M.combine(M.combine(a, b), c) == M.combine(a, M.combine(b, c))
+
+  def leftIdentity[A](a: A)(using M: Monoid[A]): Boolean =
+    M.combine(M.empty, a) == a
+
+  def rightIdentity[A](a: A)(using M: Monoid[A]): Boolean =
+    M.combine(a, M.empty) == a
