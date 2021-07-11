@@ -25,8 +25,8 @@ object Functor:
     def map[A, B](f: X => A)(g: A => B): X => B = f andThen g
 
 trait FunctorLaws:
-  def identity[F[_], A](fa: F[A])(using F: Functor[F]): Boolean =
+  def identity[F[_], A](fa: F[A])(using F: Functor[F]) =
     F.map(fa)(a => a) == fa
 
-  def compostion[F[_], A, B, C](fa: F[A], f: A => B, g: B => C)(using F: Functor[F]) : Boolean =
+  def compostion[F[_], A, B, C](fa: F[A], f: A => B, g: B => C)(using F: Functor[F]) =
     F.map(F.map(fa)(f))(g) == F.map(fa)(f andThen g)

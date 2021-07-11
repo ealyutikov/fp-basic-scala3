@@ -65,16 +65,25 @@ object Applicative:
         case (Some(a), None) => None
         case (Some(a), Some(f)) => Some(f(a))
 
+  given [X]: Applicative[Either[X, *]] with
+    def pure[A](a: A): Either[X, A] = Right(a)
+    def apply[A, B](fa: Either[X, A])(ff: Either[X, A => B]): Either[X, B] =
+      (fa, ff) match
+        case (Left(x), _) => Left(x)
+        case (Right(a), Left(x)) => Left(x)
+        case (Right(a), Right(f)) => Right(f(a))
+
+
 trait ApplicativeLaws:
 
-  def identity[F[_], A](fa: F[A])(using F: Applicative[F]): Boolean =
+  def identity[F[_], A](fa: F[A])(using F: Applicative[F]) =
     F.apply(fa)(F.pure(a => a)) == fa
 
-  def homomorphism[F[_], A, B](a: A, f: A => B)(using F: Applicative[F]): Boolean =
+  def homomorphism[F[_], A, B](a: A, f: A => B)(using F: Applicative[F]) =
     F.apply(F.pure(a))(F.pure(f)) == F.pure(f(a))
 
-  def interchange[F[_], A, B](a: A, ff: F[A => B])(using F: Applicative[F]): Boolean =
+  def interchange[F[_], A, B](a: A, ff: F[A => B])(using F: Applicative[F]) =
     F.apply(F.pure(a))(ff) == F.apply(ff)(F.pure(f => f(a)))
 
-  def map[F[_], A, B](fa: F[A], f: A => B)(using F: Applicative[F]): Boolean =
+  def map[F[_], A, B](fa: F[A], f: A => B)(using F: Applicative[F]) =
     F.map(fa)(f) == F.apply(fa)(F.pure(f))
