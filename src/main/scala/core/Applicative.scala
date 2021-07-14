@@ -61,16 +61,16 @@ object Applicative:
     def pure[A](a: A): Option[A] = Some(a)
     def apply[A, B](fa: Option[A])(ff: Option[A => B]): Option[B] =
       (fa, ff) match
-        case (None, _) => None
-        case (Some(a), None) => None
+        case (None, _)          => None
+        case (Some(a), None)    => None
         case (Some(a), Some(f)) => Some(f(a))
 
   given [X]: Applicative[Either[X, *]] with
     def pure[A](a: A): Either[X, A] = Right(a)
     def apply[A, B](fa: Either[X, A])(ff: Either[X, A => B]): Either[X, B] =
       (fa, ff) match
-        case (Left(x), _) => Left(x)
-        case (Right(a), Left(x)) => Left(x)
+        case (Left(x), _)         => Left(x)
+        case (Right(a), Left(x))  => Left(x)
         case (Right(a), Right(f)) => Right(f(a))
 
 

@@ -9,7 +9,7 @@ final class ApplicativeSpec extends munit.FunSuite with ApplicativeLaws:
     assert(identity(Option("test")))
   }
 
-  test("product") {
+  test("product syntax") {
     assert(Some(1) *> Some(2) == Some(2))
     assert(Some(1) <* Some(2) == Some(1))
   }
