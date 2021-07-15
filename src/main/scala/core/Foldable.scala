@@ -21,10 +21,16 @@ trait Foldable[F[_]]:
 
 object Foldable:
   def compose[F[_], G[_]](F: Foldable[F], G: Foldable[G]): Foldable[[X] =>> F[G[X]]] =
-    new Foldable[[X] =>> F[G[X]]] {
+    new Foldable[[X] =>> F[G[X]]]:
       def foldLeft[A, B](fa: F[G[A]], initial: B)(f: (B, A) => B): B =
         F.foldLeft(fa, initial)((acc, ga) => G.foldLeft(ga, acc)(f))
-
       def foldRight[A, B](fa: F[G[A]], initial: B)(f: (A, B) => B): B =
         F.foldRight(fa, initial)((ga, acc) => G.foldRight(ga, acc)(f))
-    }
+
+  given Foldable[List] with
+    def foldLeft[A, B](fa: List[A], initial: B)(f: (B, A) => B): B = fa.foldLeft(initial)(f)
+    def foldRight[A, B](fa: List[A], initial: B)(f: (A, B) => B): B = fa.foldRight(initial)(f)
+
+  given Foldable[Option] with
+    def foldLeft[A, B](fa: Option[A], initial: B)(f: (B, A) => B): B = fa.foldLeft(initial)(f)
+    def foldRight[A, B](fa: Option[A], initial: B)(f: (A, B) => B): B = fa.foldRight(initial)(f)

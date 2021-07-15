@@ -2,8 +2,7 @@ package core
 
 trait Monoid[A] extends Semigroup[A]:
   def empty: A
-  extension (x: A)
-    infix def |+| (y: A): A = combine(x, y)
+  extension (x: A) infix def |+|(y: A): A = combine(x, y)
 
 object Monoid:
   given Monoid[String] with
@@ -26,7 +25,7 @@ object Monoid:
     def combine(x: (A, B), y: (A, B)): (A, B) = (A.combine(x._1, y._1), B.combine(x._2, y._2))
     def empty: (A, B) = (A.empty, B.empty)
 
-  given [A : Semigroup]: Monoid[Option[A]] with
+  given [A: Semigroup]: Monoid[Option[A]] with
     def empty: Option[A] = None
     def combine(x: Option[A], y: Option[A]): Option[A] =
       (x, y) match
@@ -44,7 +43,7 @@ object Monoid:
     def combine(a: Map[K, V], b: Map[K, V]): Map[K, V] =
       (a.keySet ++ b.keySet).foldLeft(empty) { (acc, k) =>
         acc.updated(k, M.combine(a.getOrElse(k, M.empty), b.getOrElse(k, M.empty)))
-    }
+      }
 
 trait MonoidLaws:
   def associative[A](a: A, b: A, c: A)(using M: Monoid[A]) =

@@ -23,4 +23,3 @@ final class MonoidSpec extends munit.FunSuite with MonoidLaws:
     assert(rightIdentity(true))
     assert(rightIdentity(false))
   }
-

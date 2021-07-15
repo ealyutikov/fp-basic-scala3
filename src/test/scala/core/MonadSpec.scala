@@ -13,7 +13,7 @@ final class MonadSpec extends munit.FunSuite with MonadLaws {
     val result = Option(1) >>= { int => Option(int.toString) }
     assert(leftIdentity(10, int => Option(int.toString)))
   }
-  
+
   test("right identitty law") {
     assert(rightIdentity(List(1, 2, 3)))
     assert(rightIdentity(Option("hello")))

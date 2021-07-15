@@ -16,8 +16,7 @@ trait Monad[F[_]] extends Applicative[F]:
   def flatTap[A, B](fa: F[A])(f: A => F[B]): F[A] =
     flatMap(fa)(a => as(f(a), a))
 
-  extension [A, B] (fa: F[A])
-    infix def >>= (f: A => F[B]): F[B] = flatMap(fa)(f)
+  extension [A, B](fa: F[A]) infix def >>=(f: A => F[B]): F[B] = flatMap(fa)(f)
 
 object Monad:
   // WRONG, but compiles
@@ -25,7 +24,7 @@ object Monad:
     new Monad[[X] =>> F[G[X]]]:
       def pure[A](a: A): F[G[A]] = F.pure(G.pure(a))
       def flatMap[A, B](fga: F[G[A]])(f: A => F[G[B]]): F[G[B]] =
-        val nested = F.map(fga) { ga => G.map(ga) { a => f(a): F[G[B]] } : G[F[G[B]]] }: F[G[F[G[B]]]]
+        val nested = F.map(fga) { ga => G.map(ga) { a => f(a): F[G[B]] }: G[F[G[B]]] }: F[G[F[G[B]]]]
         flatten(nested)
 
   given Monad[List] with

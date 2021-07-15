@@ -20,4 +20,3 @@ final class FunctorSpec extends munit.FunSuite with FunctorLaws:
     val result = flo.map(List(Option(1)))(i => i * 2)
     assert(result == List(Option(2)))
   }
-

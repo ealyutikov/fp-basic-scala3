@@ -28,7 +28,7 @@ trait Applicative[F[_]] extends Functor[F]:
   def flip[A, B](ff: F[A => B]): F[A] => F[B] =
     fa => apply(fa)(ff)
 
-  def traverse[A,B](list: List[A])(f: A => F[B]): F[List[B]] =
+  def traverse[A, B](list: List[A])(f: A => F[B]): F[List[B]] =
     list.foldRight(pure(List[B]()))((a, fbs) => map2(f(a), fbs)(_ :: _))
 
   def productR[A, B](fa: F[A])(fb: F[B]): F[B] =
@@ -37,9 +37,9 @@ trait Applicative[F[_]] extends Functor[F]:
   def productL[A, B](fa: F[A])(fb: F[B]): F[A] =
     map2(fa, fb)((a, _) => a)
 
-  extension [A, B] (fa: F[A])
-    infix def *> (fb: F[B]): F[B] = productR(fa)(fb)
-    infix def <* (fb: F[B]): F[A] = productL(fa)(fb)
+  extension [A, B](fa: F[A])
+    infix def *>(fb: F[B]): F[B] = productR(fa)(fb)
+    infix def <*(fb: F[B]): F[A] = productL(fa)(fb)
 
 object Applicative:
   def compose[F[_], G[_]](F: Applicative[F], G: Applicative[G]): Applicative[[X] =>> F[G[X]]] =
@@ -72,7 +72,6 @@ object Applicative:
         case (Left(x), _)         => Left(x)
         case (Right(a), Left(x))  => Left(x)
         case (Right(a), Right(f)) => Right(f(a))
-
 
 trait ApplicativeLaws:
 
