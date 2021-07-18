@@ -6,3 +6,5 @@ lazy val root = project
     scalaVersion := "3.0.0",
     libraryDependencies += "org.scalameta" %% "munit" % "0.7.27" % Test
   )
+
+addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
