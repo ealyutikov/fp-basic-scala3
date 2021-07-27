@@ -16,9 +16,6 @@ trait Foldable[F[_]]:
   def sequence_[G[_]: Applicative, A, B](fga: F[G[A]]): G[Unit] =
     traverse_(fga)(identity)
 
-//  def foldK[G[_]: MonoidK, A](fga: F[G[A]]): G[A] =
-//    foldLeft(fga, MonoidK[G].empty[A])((acc, ga) => MonoidK[G].combine(acc, ga))
-
 object Foldable:
   def compose[F[_], G[_]](F: Foldable[F], G: Foldable[G]): Foldable[[X] =>> F[G[X]]] =
     new Foldable[[X] =>> F[G[X]]]:
