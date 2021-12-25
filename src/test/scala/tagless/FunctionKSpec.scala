@@ -1,5 +1,7 @@
 package tagless
 
+import tagless.FunctionK.~>
+
 final class FunctionKSpec extends munit.FunSuite:
 
   test("option to list") {
