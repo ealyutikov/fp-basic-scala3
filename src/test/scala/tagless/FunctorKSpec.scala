@@ -5,6 +5,7 @@ import tagless.FunctorKSpec.given_FunctorK_Person
 import tagless.FunctorKSpec.given_FunctorK_Person
 import tagless.FunctionK.~>
 import tagless.FunctionK.optionToList
+import tagless.FunctionK.listToOption
 
 final class FunctorKSpec extends munit.FunSuite:
 
@@ -12,7 +13,12 @@ final class FunctorKSpec extends munit.FunSuite:
     val p = Person(name = Option("test"), age = Option(10))
     val result = summon[FunctorK[Person]].mapK(p)(optionToList)
     assert(result == Person(name = List("test"), age = List(10)))
+  }
 
+  test("person list") {
+    val p = Person(name = List("test"), age = List(10))
+    val result = summon[FunctorK[Person]].mapK(p)(listToOption)
+    assert(result == Person(name = Option("test"), age = Option(10)))
   }
 
 object FunctorKSpec:
