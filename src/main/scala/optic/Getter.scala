@@ -2,7 +2,6 @@ package optic
 
 trait Getter[S, A]:
   def get(s: S): A
-
   def andThen[B](getter: Getter[A, B]): Getter[S, B] =
     (s: S) => this.get.andThen(getter.get)(s)
 

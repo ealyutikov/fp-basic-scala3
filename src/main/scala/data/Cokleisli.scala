@@ -3,7 +3,6 @@ package data
 import core.{Functor, Monad}
 
 final case class Cokleisli[F[_], A, B](run: F[A] => B):
-
   def map[C](f: B => C): Cokleisli[F, A, C] =
     Cokleisli(run andThen f)
 
