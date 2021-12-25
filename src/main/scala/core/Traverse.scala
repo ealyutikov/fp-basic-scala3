@@ -9,7 +9,10 @@ trait Traverse[F[_]] extends Functor[F] with Foldable[F]:
     traverse(fa)(identity)
 
 object Traverse:
-  def compose[F[_], G[_]](TF: Traverse[F], TG: Traverse[G])(FF: Functor[F], GF: Functor[G])(F: Foldable[F], G: Foldable[G]): Traverse[[X] =>> F[G[X]]] =
+  def compose[F[_], G[_]](TF: Traverse[F], TG: Traverse[G])(FF: Functor[F], GF: Functor[G])(
+    F: Foldable[F],
+    G: Foldable[G]
+  ): Traverse[[X] =>> F[G[X]]] =
     new Traverse[[X] =>> F[G[X]]]:
       def traverse[H[_]: Applicative, A, B](fga: F[G[A]])(f: A => H[B]): H[F[G[B]]] =
         TF.traverse(fga)(ga => TG.traverse(ga)(f))
