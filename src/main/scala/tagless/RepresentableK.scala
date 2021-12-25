@@ -12,4 +12,4 @@ trait RepresentableK[Alg[_[_]]] extends ApplicativeK[Alg]:
     tabulate([A] => (rep: Rep[Alg, A]) => f[A](rep(left), rep(right)))
 
 object RepresentableK:
-  type Rep[-Alg[f[_]], A] = [F[_]] => Alg[F] => F[A]
+  type Rep[-Alg[_[_]], A] = [F[_]] => Alg[F] => F[A]
