@@ -8,9 +8,9 @@ trait Lens[S, A] { self =>
   def combine[B](lens: Lens[A, B]): Lens[S, B] =
     new Lens[S, B]:
       def modify(f: B => B): S => S =
-        (lens.modify _).andThen(self.modify)(f)
+        lens.modify.andThen(self.modify)(f)
       def get(s: S): B =
-        (self.get _).andThen(lens.get)(s)
+        self.get.andThen(lens.get)(s)
 
   def combine[B](prism: Prism[A, B]): Optional[S, B] =
     new Optional[S, B]:
@@ -23,7 +23,7 @@ trait Lens[S, A] { self =>
             .getOrElse(a)
         }
       def getOption(s: S): Option[B] =
-        (self.get _).andThen(prism.getOption)(s)
+        self.get.andThen(prism.getOption)(s)
 }
 
 

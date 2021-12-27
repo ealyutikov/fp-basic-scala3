@@ -8,14 +8,14 @@ trait Optional[S, A] { self =>
   def combine[B](optional: Optional[A, B]): Optional[S, B] =
     new Optional[S, B]:
       def modify(f: B => B): S => S =
-        (optional.modify _).andThen(self.modify)(f)
+        optional.modify.andThen(self.modify)(f)
       def getOption(s: S): Option[B] =
         self.getOption(s).flatMap(optional.getOption)
 
   def combine[B](lens: Lens[A, B]): Optional[S, B] =
     new Optional[S, B]:
       def modify(f: B => B): S => S =
-        (lens.modify _).andThen(self.modify)(f)
+        lens.modify.andThen(self.modify)(f)
       def getOption(s: S): Option[B] =
         self.getOption(s).map(lens.get)
 
